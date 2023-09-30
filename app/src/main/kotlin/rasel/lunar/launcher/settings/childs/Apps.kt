@@ -55,6 +55,8 @@ import rasel.lunar.launcher.helpers.Constants.Companion.KEY_ICON_PACK
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_KEYBOARD_SEARCH
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_QUICK_LAUNCH
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_SCROLLBAR_HEIGHT
+import rasel.lunar.launcher.helpers.Constants.Companion.KEY_ALPHABETS
+import rasel.lunar.launcher.helpers.Constants.Companion.KEY_DRAW_CONTROL
 import rasel.lunar.launcher.helpers.UniUtils.Companion.dpToPx
 import rasel.lunar.launcher.settings.SettingsActivity.Companion.settingsPrefs
 import kotlin.system.exitProcess
@@ -85,6 +87,16 @@ internal class Apps : BottomSheetDialogFragment() {
         when (settingsPrefs!!.getBoolean(KEY_APPS_COUNT, true)) {
             true -> binding.appsCountPositive.isChecked = true
             false -> binding.appsCountNegative.isChecked = true
+        }
+
+        when (settingsPrefs!!.getBoolean(KEY_ALPHABETS, true)) {
+            true -> binding.alphabetScrollBarPositive.isChecked = true
+            false -> binding.alphabetScrollBarNegative.isChecked = true
+        }
+
+        when (settingsPrefs!!.getBoolean(KEY_DRAW_CONTROL, true)) {
+            true -> binding.drawerControlPositive.isChecked = true
+            false -> binding.drawerControlNegative.isChecked = true
         }
 
         when (settingsPrefs!!.getInt(KEY_APPS_LAYOUT, 0)) {
@@ -158,6 +170,20 @@ internal class Apps : BottomSheetDialogFragment() {
             when (group.checkedChipId) {
                 binding.appsCountPositive.id -> settingsPrefs!!.edit().putBoolean(KEY_APPS_COUNT, true).apply()
                 binding.appsCountNegative.id -> settingsPrefs!!.edit().putBoolean(KEY_APPS_COUNT, false).apply()
+            }
+        }
+
+        binding.alphabetScrollBarGroup.setOnCheckedStateChangeListener { group, _ ->
+            when (group.checkedChipId) {
+                binding.alphabetScrollBarPositive.id -> settingsPrefs!!.edit().putBoolean(KEY_ALPHABETS, true).apply()
+                binding.alphabetScrollBarNegative.id -> settingsPrefs!!.edit().putBoolean(KEY_ALPHABETS, false).apply()
+            }
+        }
+
+        binding.drawerControlGroup.setOnCheckedStateChangeListener { group, _ ->
+            when (group.checkedChipId) {
+                binding.drawerControlPositive.id -> settingsPrefs!!.edit().putBoolean(KEY_DRAW_CONTROL, true).apply()
+                binding.drawerControlNegative.id -> settingsPrefs!!.edit().putBoolean(KEY_DRAW_CONTROL, false).apply()
             }
         }
 

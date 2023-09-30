@@ -46,9 +46,11 @@ import rasel.lunar.launcher.R
 import rasel.lunar.launcher.databinding.AppDrawerBinding
 import rasel.lunar.launcher.helpers.Constants.Companion.DEFAULT_GRID_COLUMNS
 import rasel.lunar.launcher.helpers.Constants.Companion.DEFAULT_SCROLLBAR_HEIGHT
+import rasel.lunar.launcher.helpers.Constants.Companion.KEY_ALPHABETS
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_APPS_COUNT
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_APPS_LAYOUT
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_DRAW_ALIGN
+import rasel.lunar.launcher.helpers.Constants.Companion.KEY_DRAW_CONTROL
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_GRID_COLUMNS
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_KEYBOARD_SEARCH
 import rasel.lunar.launcher.helpers.Constants.Companion.KEY_QUICK_LAUNCH
@@ -120,6 +122,7 @@ internal class AppDrawer : Fragment() {
         setAppsCountVisibility()
         fetchApps()
         getAlphabetItems()
+        getDrawerControls()
         setKeyboardPadding()
 
         return binding.root
@@ -156,6 +159,7 @@ internal class AppDrawer : Fragment() {
         super.onResume()
         fetchApps()
         getAlphabetItems()
+        getDrawerControls()
 
         if (settingsPrefs.getInt(KEY_APPS_LAYOUT, 0) in 0..1) {
             appsAdapter?.updateGravity(settingsPrefs.getInt(KEY_DRAW_ALIGN, Gravity.CENTER))
@@ -222,7 +226,12 @@ internal class AppDrawer : Fragment() {
             if (height == 0) { binding.alphabets.visibility = GONE }
             else {
                 binding.alphabets.apply {
-                    if (visibility == GONE) visibility = VISIBLE
+                    if (settingsPrefs.getBoolean(KEY_ALPHABETS, true)) {
+                        if (visibility == GONE) visibility = VISIBLE
+                    } else {
+                        visibility = GONE
+                    }
+
                     updateLayoutParams { this.height = height }
                 }
                 alphabetList.clear()
@@ -239,6 +248,20 @@ internal class AppDrawer : Fragment() {
                 }
                 binding.alphabets.invalidate()
             }
+        }
+    }
+
+    private fun getDrawerControls() {
+        if (settingsPrefs.getBoolean(KEY_DRAW_CONTROL, true)) {
+            binding.moveDown.visibility = View.VISIBLE
+            binding.moveUp.visibility = View.VISIBLE
+            binding.reset.visibility = View.VISIBLE
+            binding.search.visibility = View.VISIBLE
+        } else {
+            binding.moveDown.visibility = View.GONE
+            binding.moveUp.visibility = View.GONE
+            binding.reset.visibility = View.GONE
+            binding.search.visibility = View.GONE
         }
     }
 
